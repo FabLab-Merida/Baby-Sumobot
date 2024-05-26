@@ -6,9 +6,9 @@
 #define sensorIzquierdo 2
 #define sensorDerecho 3
 #define sensorTrasero 4
-#define boton 5 //pin 4 y pin negativo
+#define boton 7 //pin 4 y pin negativo
 #define motorIzquierdo 6
-#define motorDerecho 7
+#define motorDerecho 5
 
 #define pin_echo_sensor1 8  //Sensor ultrasonido pin 8
 #define pin_trigger_sensor1 9  //Sensor ultrasonido pin 9
@@ -19,7 +19,7 @@
 #define pin_echo_sensor3 12  //Sensor ultrasonidos pin 12
 #define pin_trigger_sensor3 13  //Sensor ultrasonidos pin 13
 
-#define distanciaMaxima 40        // Esta será la distancia de detección del robot
+#define distanciaMaxima 20        // Esta será la distancia de detección del robot
 
 
 /*
@@ -104,18 +104,16 @@ void loop() {
       evasion();  //Esquiva la linea
     }
 
-    else if (distancia1 != 0 ) { //DETECTA UN ENEMIGO  
+    else if (distancia1 <= distanciaMaxima ) { //DETECTA UN ENEMIGO  
       adelante(); //Ataca moviendose hacia delante
     }
 
-    else if (distancia2 != 0 ) { //DETECTA UN ENEMIGO
+    else if (distancia2 <= distanciaMaxima ) { //DETECTA UN ENEMIGO
       girarIzquierda();
-      adelante(); //Ataca moviendose hacia delante
     }
 
-    else if (distancia3 != 0 ) { //DETECTA UN ENEMIGO
+    else if (distancia3 <= distanciaMaxima ) { //DETECTA UN ENEMIGO
       girarDerecha();
-      adelante(); //Ataca moviendose hacia delante
     }
 
     else {
@@ -151,13 +149,13 @@ void leerSensores() {
   estadoSensorTrasero = digitalRead(sensorTrasero); //Lee el sensor de linea trasero
   
   //Lee los sensores de ultrasonidos y convierte la informacion a centimetros para poder medir la distancia
-  Serial.print("Distancia frontal: ");
+  Serial.print("DF: ");
   distancia1 = ultrasonidos(pin_trigger_sensor1, pin_echo_sensor1);
 
-  Serial.print("Distancia izquierda: ");
+  Serial.print("DI: ");
   distancia2 = ultrasonidos(pin_trigger_sensor2, pin_echo_sensor2);
 
-  Serial.print("Distancia derecha: ");
+  Serial.print("DD: ");
   distancia3 = ultrasonidos(pin_trigger_sensor3, pin_echo_sensor3);
 }
 /*
@@ -190,30 +188,33 @@ long ultrasonidos(int pin_trig_sensor,int pin_echo_sensor) {
 *A PARTIR DE AQUI TODO SON MANIOBRAS DE MOVIMIENTO
 */
 void girarDerecha() {
-  Serial.println("Buscando Enemigo...");
+  Serial.println("Girando a la derecha...");
   servoDerecho.write(120);
   servoIzquierdo.write(120);
   delay(50);
 }
 void girarIzquierda() {
+  Serial.println("Girando a la izquierda...");
   servoDerecho.write(0);
   servoIzquierdo.write(0);
   delay(50);
 }
 void adelante() {
-  Serial.println("ATACANDO");
+  Serial.println("ATACANDO adelante");
   servoDerecho.write(0);
   servoIzquierdo.write(180);
   delay(100);
 }
 
 void atras() {
+  Serial.println("Moviendo atras...");
   servoDerecho.write(180);
   servoIzquierdo.write(0);
   delay(50);
 }
 
 void parado() {
+  Serial.println("Parao");
   servoDerecho.write(90);
   servoIzquierdo.write(90);
   delay(50);
@@ -226,4 +227,3 @@ void evasion() {
   atras();
   delay(1000);
 }
-
