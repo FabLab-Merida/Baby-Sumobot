@@ -3,12 +3,15 @@
 /*
 * CONFIGURACION DE LA DISTRIBUCION DE PINES
 */
-#define sensorIzquierdo 2
-#define sensorDerecho 3
+#define motorIzquierdo 2
+#define motorDerecho 3
+
 #define sensorTrasero 4
+#define sensorDerecho 5
+#define sensorIzquierdo 6
+
 #define boton 7 //pin 4 y pin negativo
-#define motorIzquierdo 6
-#define motorDerecho 5
+
 
 #define pin_echo_sensor1 8  //Sensor ultrasonido pin 8
 #define pin_trigger_sensor1 9  //Sensor ultrasonido pin 9
